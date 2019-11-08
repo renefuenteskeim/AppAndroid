@@ -1,0 +1,284 @@
+﻿Build1=Default,b4a.example
+File1=2.bal
+File2=grafico.bal
+File3=Layout_01.bal
+File4=Main.bal
+FileGroup1=Default Group
+FileGroup2=Default Group
+FileGroup3=Default Group
+FileGroup4=Default Group
+Group=Default Group
+IconFile=
+Library1=core
+Library2=serial
+Library3=sql
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="26"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'SetApplicationAttribute(android:theme, "@android:style/Theme.Holo")~\n~'End of default text.~\n~
+Module1=Grafico
+NumberOfFiles=4
+NumberOfLibraries=3
+NumberOfModules=1
+Version=9.5
+@EndOfDesignText@
+'Desarrollado por Martin Nannig #Hackerman.
+
+#Region  Project Attributes 
+	'Permite establecer el título de la aplicación, versión de código y nombre
+	#ApplicationLabel: B4A Potenciometro
+	#VersionCode: 1
+	#VersionName: IOIO Potenciometro
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	'Permite establecer atributos del Activity Module. 
+	#FullScreen: True
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'Permite declarar variables que pueden ser accesadas desde cualquier otro Activity Module, 
+	'estas variables se inician cada vez que se abre la aplicación.
+	Dim reloj As Timer
+	Dim Timer1 As Timer 
+	Dim YOYO As IOIO
+	Dim sensor As AnalogInput
+	Dim led_pin3 As PwmOutput
+	Dim poten As SQL
+	Dim Mi_Cursor As Cursor 
+	Dim finish As Int
+	Dim ValorAnalogo As Float
+	Dim rando As Int 
+End Sub
+
+Sub Globals
+	'Permite declarar variables que pueden ser accesadas solamente desde el mismo Activity Module
+	'estas variables se inician cada vez que el Activity Module es iniciado.
+	Private Label1 As Label
+	 
+	'Private cont As Int
+	Dim barraProgreso As ProgressBar
+	Dim progreso As Int
+			
+	'Private Label3 As Label
+	Dim BtAdmin As BluetoothAdmin
+	Private ListView1 As ListView
+	Private Label2 As Label
+	Private Button1 As Button
+	Private TabHost1 As TabHost
+	Private Label4 As Label
+	Dim Panel1 As Panel
+	Dim Canvas1 As Canvas
+	Dim  x1, y1, x2, y2 As Float
+	
+	
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Se colocan aquí el código que se ejecuta cada vez que inicia el Activity Module. 
+	'Por ejemplo se coloca el código para iniciar y mostrar un Layout.
+	Activity.LoadLayout("Layout_01")
+	'TabHost1.AddTab("Datos","Layout_01.bal")
+	'TabHost1.AddTab("Gráfico","grafico.bal")
+	Panel1.Initialize("Panel1")
+	Activity.AddView(Panel1, 0, 0, 100%x, 50%y)
+	Canvas1.Initialize(Panel1)
+	x1 = 100dip
+	y1 = 10dip
+	x2 = 150dip
+	y2 = 20dip
+	'Canvas1.DrawCircle(250, 800, 50, Colors.Red, True, 1dip)
+	y1 = 30dip
+	y2 = 30dip
+	Canvas1.DrawLine(100, 700, 1000,700, Colors.Black, 2dip) 'horizontal
+	
+	Canvas1.DrawLine(100, 700, 100,100, Colors.Black, 2dip) ' vertical 
+	
+	Canvas1.DrawLine(100, 640, 1000,640, Colors.Black, 0.5dip) '10
+	Canvas1.DrawLine(100, 580, 1000,580, Colors.Black, 0.5dip) '20
+	Canvas1.DrawLine(100, 520, 1000,520, Colors.Black, 0.5dip) '30
+	Canvas1.DrawLine(100, 460, 1000,460, Colors.Black, 0.5dip) '40
+	Canvas1.DrawLine(100, 400, 1000,400, Colors.Black, 0.5dip) '50
+	Canvas1.DrawLine(100, 340, 1000,340, Colors.Black, 0.5dip) '60
+	Canvas1.DrawLine(100, 280, 1000,280, Colors.Black, 0.5dip) '70
+	Canvas1.DrawLine(100, 220, 1000,220, Colors.Black, 0.5dip) '80
+	Canvas1.DrawLine(100, 160, 1000,160, Colors.Black, 0.5dip) '90
+	Canvas1.DrawLine(100, 100, 1000,100, Colors.Black, 0.5dip) '100
+	
+	
+	Canvas1.DrawLine(190, 700, 190,100, Colors.Black, 0.5dip) '30s
+	Canvas1.DrawLine(280, 700, 280,100, Colors.Black, 0.5dip) '60s
+	Canvas1.DrawLine(370, 700, 370,100, Colors.Black, 0.5dip) '90s
+	Canvas1.DrawLine(460, 700, 460,100, Colors.Black, 0.5dip) '120s
+	Canvas1.DrawLine(540, 700, 540,100, Colors.Black, 0.5dip) '150s
+	Canvas1.DrawLine(630, 700, 630,100, Colors.Black, 0.5dip) '180s
+	Canvas1.DrawLine(720, 700, 720,100, Colors.Black, 0.5dip) '210s
+	Canvas1.DrawLine(810, 700, 810,100, Colors.Black, 0.5dip) '240s
+	Canvas1.DrawLine(900, 700, 900,100, Colors.Black, 0.5dip) '270s
+	Canvas1.DrawLine(990, 700, 990,100, Colors.Black, 0.5dip) '300s
+	
+	
+	
+	Canvas1.DrawText("0.30", 140, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("1", 270, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("1.30", 320, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("2", 450, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("2.30", 500, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("3", 620, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("3.30", 680, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("4", 800, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("4.30", 860, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("5", 990, 750,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	
+	Canvas1.DrawText("10", 40, 660,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("20", 40, 600,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("30", 40, 540,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("40", 40, 480,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("50", 40, 420,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("60", 40, 360,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("70", 40, 300,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("80", 40, 240,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("90", 40, 180,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	Canvas1.DrawText("100", 30, 120,Typeface.DEFAULT ,14,Colors.Black,"LEFT")
+	
+	
+	
+	If FirstTime Then
+		poten.Initialize(File.DirInternal,"puntos.db", True )
+		poten.BeginTransaction
+		Try
+			'poten.ExecNonQuery("DROP TABLE valor")
+			poten.ExecNonQuery("CREATE TABLE IF NOT EXISTS valor (id_valor INTEGER PRIMARY KEY AUTOINCREMENT, val INTEGER, tiempo INTEGER) ")
+			poten.TransactionSuccessful
+			ToastMessageShow("Crea la base",True)
+		Catch
+			Log("Error de creacion de base de datos: "&LastException.Message)
+		End Try
+		poten.EndTransaction	
+		BtAdmin.Initialize("BtAdmin")
+		reloj.Initialize("reloj", 100)
+		Conectar_IOIO
+   	End If	
+	finish = 0
+	
+	Timer1.Initialize("Timer1",1000)
+	Timer1.Enabled=True 
+	
+	ListView1.Clear 
+End Sub
+Sub reloj_Tick
+	Try
+		ValorAnalogo = sensor.Read
+		progreso = sensor.Read * 100
+		barraProgreso.Progress = progreso
+		led_pin3.DutyCycle(ValorAnalogo,0)
+		Label1.Text=ValorAnalogo
+	
+	Catch
+		Log("Error: "&LastException.Message)
+		Desconectar_IOIO
+		Conectar_IOIO
+	End Try
+	
+End Sub
+Sub Timer1_tick
+		finish= finish+1
+		If finish == 10 Or finish == 20 Or finish == 30 Or finish == 40 Or finish == 50 Or finish == 60 Or finish == 70 Or finish == 80 Or finish == 90 Or finish == 100 Or finish == 110 Or finish == 120 Or finish == 130 Or finish == 140 Or finish == 150 Or finish == 160 Or finish == 170 Or finish == 180 Or finish == 190 Or finish == 200 Or finish == 210 Or finish == 220 Or finish == 230 Or finish == 240 Or finish == 250 Or finish == 260 Or finish == 270 Or finish == 280 Or finish == 290 Or finish == 300 Then
+			ListView1.Clear
+			'Msgbox("Tomo dato","")
+			poten.BeginTransaction
+			Try
+				poten.ExecNonQuery2("INSERT INTO valor (val,tiempo) VALUES (?,?)",Array As String (ValorAnalogo*100,finish))
+			    rando = Rnd(0,256)
+			    Canvas1.DrawCircle((finish*3+100), -ValorAnalogo*600+700, ValorAnalogo*100, Colors.ARGB(170,rando,rando,rando), True, 1dip)
+				poten.TransactionSuccessful
+				'Msgbox(ValorAnalogo*100,"")
+			Catch
+				Log("catch: "&LastException.Message)
+			End Try
+			poten.EndTransaction
+			
+			Mi_Cursor=poten.ExecQuery("SELECT * FROM valor ORDER BY id_valor ASC")
+			If Mi_Cursor.RowCount>0 Then
+				For i = 0 To Mi_Cursor.RowCount-1
+					Mi_Cursor.Position=i
+					ListView1.AddSingleLine( " Valor:  " & Mi_Cursor.GetString("val") & " Tiempo: " & Mi_Cursor.GetString("tiempo") )
+					'Msgbox("ingreso2","")
+				Next
+			
+			End If
+			
+			'cont=cont-1
+		End If
+		'If cont==0 Then
+		'	poten.BeginTransaction
+		'	poten.ExecNonQuery("DROP TABLE valor")
+		'	poten.EndTransaction
+		'	ExitApplication
+		'End If
+		
+End Sub
+Sub Activity_Resume
+	'Se coloca aquí el código a ejecutar cada vez que se regresa nuevamente hacia el Activity Module. 
+	'En una aplicación Android sería cada vez que se regresa a una pantalla después de haber cerrado otra.
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	'Se coloca aquí el código a ejecutar cada vez que el Activity Module esta en pausa.	
+	If UserClosed Then
+		Desconectar_IOIO
+	End If
+End Sub
+
+Sub Conectar_IOIO
+	YOYO.Initialize
+	If BtAdmin.IsEnabled Then YOYO.Connect("yoyo",YOYO.CONN_BT,1,0)
+	 
+End Sub
+
+Sub Desconectar_IOIO
+	sensor.Close
+	led_pin3.close
+	YOYO.Disconnect
+End Sub
+
+Sub yoyo_connected(noerror As Boolean)
+	If noerror Then
+		ToastMessageShow("IOIO Conectado",True)
+		Conexion_pines
+	Else
+		Log(LastException.Message)
+	End If
+End Sub
+
+Sub Conexion_pines
+	YOYO.OpenAnalogInput("potenciometro",39)
+	YOYO.OpenPwmOutput("led_pin3",3,led_pin3.OP_NORMAL,50)
+End Sub
+Sub led_pin3_open(noerror As Boolean, result As Object)
+	If noerror Then
+		
+		led_pin3=result
+		
+		Else
+		Log("Error: "&LastException.Message)
+	End If
+End Sub
+
+Sub potenciometro_open(noerror As Boolean, result As Object)
+	If noerror Then
+		sensor=result
+		reloj.Enabled=True
+	Else
+		Log("Error: "&LastException.Message)
+	End If
+End Sub
+
+
+
+
+
+Sub Button1_Click
+	StartActivity(Grafico)
+End Sub
